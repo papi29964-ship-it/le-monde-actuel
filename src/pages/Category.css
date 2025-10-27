@@ -1,0 +1,119 @@
+.category-page {
+  flex: 1;
+}
+
+.category-header {
+  background: linear-gradient(135deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+  color: white;
+  padding: 3rem 0;
+  margin-bottom: 2rem;
+}
+
+.category-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.category-description {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.articles-list {
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.article-item {
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.article-item:hover {
+  border-left-color: var(--primary-color);
+  box-shadow: var(--shadow-hover);
+  transform: translateX(4px);
+}
+
+.article-content h2 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+}
+
+.article-content h2 a {
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+}
+
+.article-content h2 a:hover {
+  color: var(--primary-color);
+}
+
+.article-content .excerpt {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.article-content .article-meta {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  font-family: 'Arial', sans-serif;
+}
+
+.article-content .author {
+  font-weight: 600;
+}
+
+.read-more-btn {
+  display: inline-block;
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 1rem;
+  font-family: 'Arial', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.read-more-btn:hover {
+  text-decoration: underline;
+  transform: translateX(4px);
+}
+
+@media (max-width: 768px) {
+  .category-header {
+    padding: 2rem 0;
+  }
+  
+  .category-header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .category-description {
+    font-size: 1rem;
+  }
+  
+  .article-item {
+    padding: 1.5rem;
+  }
+  
+  .article-content h2 {
+    font-size: 1.35rem;
+  }
+  
+  .article-content .article-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
