@@ -1,6 +1,9 @@
+# Backend local pour tester (remplacer par git-gateway en production)
 backend:
-  name: git-gateway
-  branch: main
+  name: test-repo
+
+# Mode de publication éditorial (brouillon → révision → publié)
+# publish_mode: editorial_workflow  # Désactivé en mode test
 
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"

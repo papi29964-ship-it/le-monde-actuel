@@ -6,6 +6,7 @@ import Category from './pages/Category';
 import Article from './pages/Article';
 import Team from './pages/Team';
 import Contact from './pages/Contact';
+import Admin from './pages/Admin';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/article/:id" element={<Article />} />
+        <Route path="/admin" element={<Admin />} />
         <Route path="/equipe" element={<Team />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/:category" element={<Category />} />
