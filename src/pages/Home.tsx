@@ -1,84 +1,58 @@
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import './Home.css';
-
-// Mock data for articles
-const featuredArticle = {
-  id: 1,
-  title: "Le développement économique au Tchad : Perspectives et défis",
-  excerpt: "Une analyse approfondie des opportunités de croissance économique et des obstacles à surmonter pour le développement du pays...",
-  category: "Économie",
-  author: "Rédaction",
-  date: "27 Octobre 2025",
-  image: "https://via.placeholder.com/800x450/c41e3a/ffffff?text=Article+Principal"
-};
-
-const newsArticles = [
-  {
-    id: 2,
-    title: "Nouvelle réforme éducative annoncée",
-    excerpt: "Le gouvernement dévoile un plan ambitieux pour moderniser le système éducatif...",
-    category: "Société",
-    date: "26 Octobre 2025"
-  },
-  {
-    id: 3,
-    title: "Le sport tchadien à l'honneur",
-    excerpt: "Les athlètes nationaux brillent lors des compétitions internationales récentes...",
-    category: "Sport",
-    date: "26 Octobre 2025"
-  },
-  {
-    id: 4,
-    title: "Festival culturel à N'Djamena",
-    excerpt: "Un événement majeur célèbre la richesse du patrimoine culturel tchadien...",
-    category: "Culture",
-    date: "25 Octobre 2025"
-  },
-  {
-    id: 5,
-    title: "Relations diplomatiques renforcées",
-    excerpt: "Des accords bilatéraux importants signés avec plusieurs pays partenaires...",
-    category: "International",
-    date: "25 Octobre 2025"
-  },
-  {
-    id: 6,
-    title: "Débat sur la transition énergétique",
-    excerpt: "Les experts discutent des solutions pour un avenir énergétique durable...",
-    category: "Politique",
-    date: "24 Octobre 2025"
-  },
-  {
-    id: 7,
-    title: "Innovation technologique locale",
-    excerpt: "Des jeunes entrepreneurs lancent des startups prometteuses dans le secteur tech...",
-    category: "Économie",
-    date: "24 Octobre 2025"
-  }
-];
+import { loadArticles, getFeaturedArticle, formatDate } from '../utils/articles';
+import type { Article } from '../utils/articles';
 
 const Home = () => {
+  const [featuredArticle, setFeaturedArticle] = useState<Article | null>(null);
+  const [newsArticles, setNewsArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchArticles() {
+      try {
+        const allArticles = await loadArticles();
+        const featured = await getFeaturedArticle();
+        
+        setFeaturedArticle(featured || allArticles[0] || null);
+        setNewsArticles(allArticles.filter(a => !a.featured).slice(0, 6));
+      } catch (error) {
+        console.error('Error loading articles:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchArticles();
+  }, []);
+
+  if (loading) {
+    return <div className="home"><div className="container">Chargement...</div></div>;
+  }
   return (
     <div className="home">
-      <section className="hero">
-        <div className="container">
-          <div className="featured-article">
-            <img src={featuredArticle.image} alt={featuredArticle.title} />
-            <div className="featured-content">
-              <span className="category-badge">{featuredArticle.category}</span>
-              <h2>{featuredArticle.title}</h2>
-              <p className="excerpt">{featuredArticle.excerpt}</p>
-              <div className="article-meta">
-                <span className="author">{featuredArticle.author}</span>
-                <span className="date">{featuredArticle.date}</span>
+      {featuredArticle && (
+        <section className="hero">
+          <div className="container">
+            <div className="featured-article">
+              <img src={featuredArticle.image} alt={featuredArticle.title} />
+              <div className="featured-content">
+                <span className="category-badge">{featuredArticle.category}</span>
+                <h2>{featuredArticle.title}</h2>
+                <p className="excerpt">{featuredArticle.excerpt}</p>
+                <div className="article-meta">
+                  <span className="author">{featuredArticle.author}</span>
+                  <span className="date">{formatDate(featuredArticle.date)}</span>
+                </div>
+                <Link to={`/article/${featuredArticle.id}`} className="read-more">
+                  Lire l'article complet →
+                </Link>
               </div>
-              <Link to={`/article/${featuredArticle.id}`} className="read-more">
-                Lire l'article complet →
-              </Link>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="latest-news">
         <div className="container">
@@ -90,7 +64,7 @@ const Home = () => {
                 <h3>{article.title}</h3>
                 <p className="excerpt">{article.excerpt}</p>
                 <div className="card-footer">
-                  <span className="date">{article.date}</span>
+                  <span className="date">{formatDate(article.date)}</span>
                   <Link to={`/article/${article.id}`} className="read-link">
                     Lire plus →
                   </Link>

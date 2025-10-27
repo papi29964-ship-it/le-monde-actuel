@@ -1,0 +1,31 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "articles"
+    label: "Articles"
+    folder: "content/articles"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - { label: "ID", name: "id", widget: "number", value_type: "int" }
+      - { label: "Titre", name: "title", widget: "string" }
+      - { label: "Résumé", name: "excerpt", widget: "text" }
+      - { 
+          label: "Catégorie", 
+          name: "category", 
+          widget: "select", 
+          options: ["Politique", "Économie", "Société", "Culture", "Sport", "International"] 
+        }
+      - { label: "Auteur", name: "author", widget: "string" }
+      - { label: "Date de publication", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD" }
+      - { label: "Temps de lecture", name: "readTime", widget: "string", default: "5 min de lecture" }
+      - { label: "Image principale", name: "image", widget: "image" }
+      - { label: "Article à la une", name: "featured", widget: "boolean", default: false }
+      - { label: "Contenu", name: "body", widget: "markdown" }

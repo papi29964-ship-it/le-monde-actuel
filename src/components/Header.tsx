@@ -16,6 +16,7 @@ const Header = () => {
       <div className="header-main">
         <div className="container">
           <Link to="/" className="logo">
+            <img src="/logo.png" alt="Le Monde-Actuel Logo" className="logo-img" />
             <h1>Le Monde-Actuel</h1>
             <p className="subtitle">Information Générale et Analyse</p>
           </Link>

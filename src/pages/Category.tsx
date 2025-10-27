@@ -1,5 +1,8 @@
 import { useParams, Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import './Category.css';
+import { getArticlesByCategory, formatDate } from '../utils/articles';
+import type { Article } from '../utils/articles';
 
 const categoryData: { [key: string]: { title: string; description: string } } = {
   politique: {
@@ -28,47 +31,29 @@ const categoryData: { [key: string]: { title: string; description: string } } = 
   }
 };
 
-const mockArticles = [
-  {
-    id: 101,
-    title: 'Analyse approfondie de la situation actuelle',
-    excerpt: 'Un regard détaillé sur les développements récents et leurs implications pour l\'avenir...',
-    date: '27 Octobre 2025',
-    author: 'Jean Dupont'
-  },
-  {
-    id: 102,
-    title: 'Les enjeux majeurs du moment',
-    excerpt: 'Une exploration des défis et opportunités qui se présentent dans ce domaine...',
-    date: '26 Octobre 2025',
-    author: 'Marie Martin'
-  },
-  {
-    id: 103,
-    title: 'Perspectives d\'avenir et solutions',
-    excerpt: 'Des experts partagent leur vision sur les solutions possibles et les perspectives...',
-    date: '25 Octobre 2025',
-    author: 'Paul Bernard'
-  },
-  {
-    id: 104,
-    title: 'Impact sur la communauté locale',
-    excerpt: 'Comment ces développements affectent-ils directement la vie quotidienne des citoyens...',
-    date: '24 Octobre 2025',
-    author: 'Sophie Leclerc'
-  },
-  {
-    id: 105,
-    title: 'Débat et opinions contradictoires',
-    excerpt: 'Différents points de vue s\'affrontent sur cette question d\'actualité brûlante...',
-    date: '23 Octobre 2025',
-    author: 'Ahmed Hassan'
-  }
-];
-
 const Category = () => {
   const { category } = useParams<{ category: string }>();
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
+  
   const categoryInfo = category ? categoryData[category] : null;
+
+  useEffect(() => {
+    async function fetchCategoryArticles() {
+      if (!category) return;
+      
+      try {
+        const categoryArticles = await getArticlesByCategory(category);
+        setArticles(categoryArticles);
+      } catch (error) {
+        console.error('Error loading category articles:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchCategoryArticles();
+  }, [category]);
 
   if (!categoryInfo) {
     return (
@@ -77,6 +62,14 @@ const Category = () => {
           <h2>Catégorie non trouvée</h2>
           <Link to="/">Retour à l'accueil</Link>
         </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="category-page">
+        <div className="container">Chargement...</div>
       </div>
     );
   }
@@ -91,25 +84,29 @@ const Category = () => {
       </div>
 
       <div className="container">
-        <div className="articles-list">
-          {mockArticles.map(article => (
-            <article key={article.id} className="article-item">
-              <div className="article-content">
-                <h2>
-                  <Link to={`/article/${article.id}`}>{article.title}</Link>
-                </h2>
-                <p className="excerpt">{article.excerpt}</p>
-                <div className="article-meta">
-                  <span className="author">Par {article.author}</span>
-                  <span className="date">{article.date}</span>
+        {articles.length === 0 ? (
+          <p className="no-articles">Aucun article dans cette catégorie pour le moment.</p>
+        ) : (
+          <div className="articles-list">
+            {articles.map(article => (
+              <article key={article.id} className="article-item">
+                <div className="article-content">
+                  <h2>
+                    <Link to={`/article/${article.id}`}>{article.title}</Link>
+                  </h2>
+                  <p className="excerpt">{article.excerpt}</p>
+                  <div className="article-meta">
+                    <span className="author">Par {article.author}</span>
+                    <span className="date">{formatDate(article.date)}</span>
+                  </div>
                 </div>
-              </div>
-              <Link to={`/article/${article.id}`} className="read-more-btn">
-                Lire l'article →
-              </Link>
-            </article>
-          ))}
-        </div>
+                <Link to={`/article/${article.id}`} className="read-more-btn">
+                  Lire l'article →
+                </Link>
+              </article>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

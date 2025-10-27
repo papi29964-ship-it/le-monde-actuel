@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "gray-matter": "^4.0.3",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-markdown": "^10.1.0",
     "react-router-dom": "^7.9.4"
   },
   "devDependencies": {
@@ -30,7 +32,12 @@
   },
   "description": "Le Monde-Actuel - Journal en ligne indépendant d'information générale et d'analyse",
   "main": "eslint.config.js",
-  "keywords": ["news", "journal", "actualité", "information"],
+  "keywords": [
+    "news",
+    "journal",
+    "actualité",
+    "information"
+  ],
   "author": "Le Monde-Actuel",
   "license": "ISC"
 }
